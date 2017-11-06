@@ -77,8 +77,12 @@ class FacebookRequestError(FacebookError):
                 self._api_error_subcode = self._error['error_subcode']
             if 'type' in self._error:
                 self._api_error_type = self._error['type']
-                
-            errData = json.loads(self._error.get('error_data', '{}'))
+
+            try:
+                errData = json.loads(self._error.get('error_data', '{}'))
+            except Exception:
+                errData = {}
+
             if errData.get('blame_field_specs'):
                 self._api_blame_field_specs = \
                     errData['blame_field_specs']
